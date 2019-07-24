@@ -29,6 +29,7 @@ public class FileSystemStorageService implements DataStorageService {
     }
 
     public boolean remove(URI uri) throws IOException {
+        logger.info("Removing {}", uri);
         return Files.deleteIfExists(Path.of(uri));
     }
     
