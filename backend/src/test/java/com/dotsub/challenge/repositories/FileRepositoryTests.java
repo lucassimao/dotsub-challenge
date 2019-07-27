@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -168,5 +169,50 @@ public class FileRepositoryTests {
 				.andExpect(content().bytes(picBytes));
 
 	}
+
+
+	@Test
+	public void testDeleteFile() throws Exception {
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("cable-stayed-bridge.jpeg").getFile());
+
+		byte[] picBytes = Files.readAllBytes(file.toPath());
+		String base64EncodedImage = Base64.getEncoder().encodeToString(picBytes);
+
+		// creating the json representation of a new file
+		JSONObject requestBody = new JSONObject();
+		requestBody.put("description", "Cable stayed bridge in my city");
+		requestBody.put("title", "Cable-stayed pic");
+		requestBody.put("data", base64EncodedImage);
+
+		MvcResult resultActions = mvc.perform(post("/files").content(requestBody.toString())
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(request().asyncStarted()).andReturn();
+
+		MockHttpServletResponse response = mvc.perform(asyncDispatch(resultActions)).andExpect(status().isCreated())
+				.andExpect(header().exists("location")).andReturn().getResponse();
+
+		String resourceLocation = response.getHeader("location");
+
+		// deleting this file ...
+		mvc.perform(delete(resourceLocation)).andExpect(status().isNoContent());
+		// a get request mus return 404, not found
+		mvc.perform(get(resourceLocation)).andExpect(status().isNotFound());
+
+
+		// /download/id
+		Pattern pattern = Pattern.compile("(\\S+)/files/(\\d+)$");
+		Matcher matcher = pattern.matcher(resourceLocation);
+		assertTrue(matcher.matches());
+		String serverUrl = matcher.group(1);
+		int idFIle = Integer.valueOf(matcher.group(2));
+
+		// a request to dowload the previously deleted file mus return 404, too
+		String downloadEndpoint = serverUrl + "/download/" + idFIle;
+		var asyncRequest = mvc.perform(get(downloadEndpoint)).andExpect(request().asyncStarted()).andReturn();
+
+		mvc.perform(asyncDispatch(asyncRequest)).andExpect(status().isNotFound());
+
+	}	
 
 }
