@@ -2,8 +2,6 @@ package com.dotsub.challenge.repositories;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 import com.dotsub.challenge.dto.FileDTO;
 import com.dotsub.challenge.model.File;
@@ -12,10 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.async.DeferredResult;
 
 /**
  * FileRepository
@@ -37,6 +33,34 @@ public interface FileRepository extends PagingAndSortingRepository<File, Long>, 
             Logger logger = LoggerFactory.getLogger(FileRepository.class);
             logger.error("There was a problem when removing the file", e);
         }
+    }
+
+    @Transactional
+    default public File save(FileDTO dto) throws RuntimeException {
+        var logger = LoggerFactory.getLogger(FileRepository.class);
+        URI uri = null;
+        try {
+            uri = this.getDataStorageService().writeFile(dto.getData());
+
+            File file = new File();
+            file.setDescription(dto.getDescription());
+            file.setTitle(dto.getTitle());
+            file.setDataUri(uri.toString());
+            this.save(file);
+
+            return file;
+        } catch (Exception e) {
+            logger.error("There was a error while persisting the file", e);
+            if (uri != null) {
+                try {
+                    this.getDataStorageService().remove(uri);
+                } catch (IOException e1) {
+                    logger.error("There was a error while excluding a file", e1);
+                    throw new RuntimeException(e1);
+                }
+            }
+            throw new RuntimeException(e);
+        }        
     }
 
     @Transactional
