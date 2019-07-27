@@ -21,7 +21,9 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.LinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -92,53 +94,34 @@ public class FileController {
     }
 
     @PutMapping("/files/{id}")
-    public DeferredResult<ResponseEntity<?>> updateFile(@Valid @RequestBody FileDTO dto,@PathVariable("id") Long id) {
+    public DeferredResult<ResponseEntity<?>> updateFile(@Valid @RequestBody FileDTO dto, @PathVariable("id") Long id) {
+        return patchFile(dto, id);
+    }
+
+    // the main difference here from the put endpoint, is the lack of validation
+    @PatchMapping("/files/{id}")
+    public DeferredResult<ResponseEntity<?>> patchFile(@RequestBody FileDTO dto, @PathVariable("id") Long id) {
 
         Optional<File> optional = this.fileRepository.findById(id);
         var deferredResult = new DeferredResult<ResponseEntity<?>>();
-        
-        if(optional.isPresent()){
 
+        if (optional.isPresent()) {
             CompletableFuture.supplyAsync(() -> {
-                URI uri = null;
-                try {
-                    uri = this.fileService.writeFile(dto.getData());
-    
-                    File file = optional.get();
-                    String oldFileDataUri = file.getDataUri();
 
-                    file.setDescription(dto.getDescription());
-                    file.setTitle(dto.getTitle());
-                    file.setDataUri(uri.toString());
+                this.fileRepository.update(optional.get(), dto);
+                return ResponseEntity.noContent().build();
 
-                    this.fileRepository.save(file);
-                    this.fileService.remove(URI.create(oldFileDataUri));
-    
-                    return ResponseEntity.noContent().build();
-    
-                } catch (Exception e) {
-                    this.logger.error("There was a error while updating the file", e);
-                    if (uri != null) {
-                        try {
-                            this.fileService.remove(uri);
-                        } catch (IOException e1) {
-                            this.logger.error("There was a error while excluding a file", e1);
-                            throw new CompletionException(e1);
-                        }
-                    }
-                    throw new CompletionException(e);
-                }
             }).whenCompleteAsync((result, throwable) -> {
                 if (throwable == null) {
                     deferredResult.setResult(result);
                 } else
                     deferredResult.setErrorResult(throwable);
-            });            
+            });
+
         } else {
             deferredResult.setResult(ResponseEntity.notFound().build());
         }
-            
-        
+
         return deferredResult;
     }
 

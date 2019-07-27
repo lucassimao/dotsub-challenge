@@ -91,9 +91,15 @@ public class FileRepositoryPATCHTests {
 
 		JSONObject requestBody = new JSONObject();
 
-		mvc.perform(
+		// PATHC triggers a async operation on the backend
+		var asyncResult = mvc.perform(
 				patch(this.resourceLocation).content(requestBody.toString()).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNoContent());
+				.andExpect(request().asyncStarted())
+				.andReturn();
+
+		// when finished, returns status code is 204
+		mvc.perform(asyncDispatch(asyncResult)).andExpect(status().isNoContent());
+
 
 		mvc.perform(get(this.resourceLocation).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -114,9 +120,14 @@ public class FileRepositoryPATCHTests {
 		JSONObject requestBody = new JSONObject();
 		requestBody.put("description", "new description");
 
-		mvc.perform(
+		// PATHC triggers a async operation on the backend
+		var asyncResult = mvc.perform(
 				patch(this.resourceLocation).content(requestBody.toString()).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNoContent());
+				.andExpect(request().asyncStarted())
+				.andReturn();
+
+		// when finished, returns status code is 204
+		mvc.perform(asyncDispatch(asyncResult)).andExpect(status().isNoContent());
 
 		mvc.perform(get(this.resourceLocation).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -138,9 +149,14 @@ public class FileRepositoryPATCHTests {
 		requestBody.put("description", "Description 123");
 		requestBody.put("title", "title foo");
 
-		mvc.perform(
+		// PATHC triggers a async operation on the backend
+		var asyncResult = mvc.perform(
 				patch(this.resourceLocation).content(requestBody.toString()).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNoContent());
+				.andExpect(request().asyncStarted())
+				.andReturn();
+
+		// when finished, returns status code is 204
+		mvc.perform(asyncDispatch(asyncResult)).andExpect(status().isNoContent());
 
 		mvc.perform(get(this.resourceLocation).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -167,15 +183,19 @@ public class FileRepositoryPATCHTests {
 		JSONObject requestBody = new JSONObject();
 		requestBody.put("data", base64EncodedImage);
 
-		mvc.perform(
+		var asyncResult = mvc.perform(
 				patch(this.resourceLocation).content(requestBody.toString()).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNoContent());
+				.andExpect(request().asyncStarted())
+				.andReturn();
+
+		mvc.perform(asyncDispatch(asyncResult)).andExpect(status().isNoContent());
 
 		mvc.perform(get(this.resourceLocation).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("description", is(ORIGINAL_DESCRIPTION)))
 				.andExpect(jsonPath("title", is(ORIGINAL_TITLE)))
-				.andExpect(jsonPath("dateCreated").exists()).andExpect(jsonPath("data").doesNotExist());
+				.andExpect(jsonPath("dateCreated").exists())
+				.andExpect(jsonPath("data").doesNotExist());
 
 		var asyncAction = mvc.perform(get(downloadEndpoint)).andExpect(request().asyncStarted()).andReturn();
 
