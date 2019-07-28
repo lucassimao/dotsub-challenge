@@ -1,0 +1,35 @@
+.Paginator {
+  padding: 2em 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.Paginator .info {
+  color: rgb(86, 103, 135);
+}
+
+.Paginator button {
+  background-color: #fff;
+  border: 1px solid #999;
+  margin: 0;
+  border-radius: 5px;
+  color: #999;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+.Paginator button:not(:last-of-type) {
+  margin-right: 0.6em;
+}
+
+.Paginator button.active {
+  background-color: #03a9f4;
+  color: #fff;
+  font-weight: bold;
+}
+
+.Paginator button.active:hover {
+  background-color: #0397d6;
+  color: #fff;
+}
