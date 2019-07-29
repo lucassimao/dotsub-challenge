@@ -3,7 +3,7 @@
   width: 400px;
 }
 
-.form-topbar{
+.form-topbar {
   height: 70px;
   color: #fff;
   background-color: #435d7d;
@@ -20,14 +20,14 @@
   font-family: "Varela Round", sans-serif;
 }
 
-.form-topbar .close{
+.form-topbar .close {
   color: #f00;
   cursor: pointer;
   font-size: 1.5em;
   font-weight: bold;
 }
 
-.Form .form-field{
+.Form .form-field {
   padding: 0 1em;
 }
 
@@ -56,12 +56,8 @@
   text-align: right;
   border-top: 1px solid #999;
   padding: 10px 1em 1em 1em;
-  
 }
 
 .Form .buttons :first-child {
   margin-right: 10px;
 }
-
-
-

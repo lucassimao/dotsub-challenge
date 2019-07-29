@@ -11,22 +11,24 @@ function Form(props) {
         <h2>
           New <span className="bold">File</span>
         </h2>
-        <span onClick={closeForm} className="close">X</span>
+        <span onClick={closeForm} className="close">
+          X
+        </span>
       </div>
       <div className="form-field">
         <label htmlFor="inputTitle">Title: </label>
-        <input id="inputTitle"></input>
+        <input id="inputTitle" />
       </div>
       <div className="form-field">
         <label htmlFor="inputDescription">Description: </label>
-        <textarea rows="6" id="inputDescription"></textarea>
+        <textarea rows="6" id="inputDescription" />
       </div>
       <div className="form-field">
-        <input type="file"></input>
+        <input type="file" />
       </div>
 
       <div className="buttons">
-        <input type="submit" value="Save"></input>
+        <input type="submit" value="Save" />
         <button onClick={closeForm}>Cancel</button>
       </div>
     </form>

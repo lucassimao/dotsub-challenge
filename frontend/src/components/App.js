@@ -7,9 +7,20 @@ import Modal from "./Modal";
 import SearchBox from "./SearchBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import AppContext from "../AppContext";
+
+export const DEFAULT_PAGE_SIZE = 10;
+
+const initialState = {
+  page: 0,
+  totalEntries: 0,
+  pageSize: DEFAULT_PAGE_SIZE,
+  files: []
+};
 
 function App() {
-  const [mustShowForm, setShowForm] = useState(true);
+  const [mustShowForm, setShowForm] = useState(false);
+
   const showForm = () => setShowForm(true);
   const hideForm = () => setShowForm(false);
 
@@ -24,10 +35,11 @@ function App() {
           &nbsp;New File
         </button>
       </div>
-
-      <SearchBox></SearchBox>
-      <Table></Table>
-      <Paginator></Paginator>
+      <AppContext initialState={initialState}>
+        <SearchBox />
+        <Table />
+        <Paginator />
+      </AppContext>
 
       {mustShowForm ? (
         <Modal>
