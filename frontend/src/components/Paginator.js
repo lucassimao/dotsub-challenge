@@ -32,6 +32,7 @@ function Paginator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
+  // TODO controlar o caso do dataset vazio
   return (
     <div className="Paginator">
       <span className="info">

@@ -5,13 +5,15 @@ class FileService {
 
   async list(page, pageSize) {
     try {
-        const params = { page, size:pageSize }
-      const response = await axios.get(FileService.BACKEND, {params});
-      const {data} = response;
-      
+      const params = { page, size: pageSize };
+      const response = await axios.get(FileService.BACKEND, { params });
+      const { data } = response;
+
       return {
         page: data.page,
-        files: data._embedded.files
+        files: data._embedded.files.map(file => {
+          return { ...file, dateCreated: new Date(file.dateCreated) };
+        })
       };
     } catch (error) {
       console.error(error);
@@ -19,6 +21,12 @@ class FileService {
         error
       };
     }
+  }
+
+  async removeFile(fileDetails) {
+    const selfLink = fileDetails._links.self.href;
+    await axios.delete(selfLink);
+    return true;
   }
 }
 

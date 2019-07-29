@@ -1,15 +1,52 @@
-import {
-  faEdit,
-  faFileDownload,
-  faTrash
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useAppState } from "../AppContext";
 import "./Table.css";
+import FileService from "../services/FileService";
+import { DEFAULT_PAGE_SIZE } from "./App";
+
+const fileService = new FileService();
 
 function Table() {
-  const [appState] = useAppState();
+  const [appState, dispatch] = useAppState();
+
+  const removeFile = row => {
+    const confirmation = window.confirm("Sure ?");
+    if (confirmation) {
+      fileService
+        .removeFile(row)
+        .then(res => {
+            alert("File removed");
+          const nextPage = appState.files.length === 1 ? appState.page - 1 : appState.page;
+          if (nextPage >= 0) {
+            fileService.list(nextPage, DEFAULT_PAGE_SIZE).then(response => {
+              dispatch({ type: "setPage", value: response.page.number });
+              dispatch({ type: "setTotalPages", value: response.page.totalPages });
+              dispatch({ type: "setPageSize", value: response.page.size });
+              dispatch({
+                type: "setTotalElements",
+                value: response.page.totalElements
+              });
+              dispatch({ type: "setFiles", value: response.files });
+            });
+          } else {
+            dispatch({ type: "setPage", value: 0 });
+            dispatch({ type: "setTotalPages", value: 0 });
+            dispatch({ type: "setPageSize", value:0 });
+            dispatch({
+              type: "setTotalElements",
+              value: 0
+            });
+            dispatch({ type: "setFiles", value: [] });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          alert("It was not possible to remove this file");
+        });
+    }
+  };
 
   return (
     <table className="Table">
@@ -26,14 +63,11 @@ function Table() {
           <tr key={idx}>
             <td>{row.title}</td>
             <td>{row.description}</td>
-            <td className="center">{new Date(row.dateCreated).toLocaleDateString()}</td>
+            <td className="center">{row.dateCreated.toLocaleDateString()}</td>
             <td className="row-options center">
               <FontAwesomeIcon className="row-option-edit" icon={faEdit} />
-              <FontAwesomeIcon className="row-option-trash" icon={faTrash} />
-              <FontAwesomeIcon
-                className="row-option-download"
-                icon={faFileDownload}
-              />
+              <FontAwesomeIcon onClick={() => removeFile(row)} className="row-option-trash" icon={faTrash} />
+              <FontAwesomeIcon className="row-option-download" icon={faFileDownload} />
             </td>
           </tr>
         ))}
