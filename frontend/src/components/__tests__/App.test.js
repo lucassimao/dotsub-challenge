@@ -34,10 +34,15 @@ afterEach(() => {
   modalRoot = null;
 });
 
-it("renders without crashing", () => {
+it("renders without crashing", async () => {
   act(() => {
     ReactDOM.render(<App />, container);
   });
+
+  await act(async () => {
+    jest.runAllTimers();
+  });
+
 
   const searchBox = container.getElementsByClassName("SearchBox")[0];
   expect(searchBox).not.toBeUndefined();

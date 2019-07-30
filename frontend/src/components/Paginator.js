@@ -32,8 +32,7 @@ function Paginator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
-  // TODO controlar o caso do dataset vazio
-  return (
+  return appState.totalPages > 1 ? (
     <div className="Paginator">
       <span className="info">
         Page nº 
@@ -65,7 +64,7 @@ function Paginator() {
         {currentPage + 1 < appState.totalPages ? <button onClick={()=>setCurrentPage(currentPage + 1)}>Next</button> : null}
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default Paginator;
