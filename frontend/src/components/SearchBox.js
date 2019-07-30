@@ -4,7 +4,9 @@ import {
   ACTION_CHANGE_PAGE,
   ACTION_SET_SEARCH_FILTER,
   ACTION_SHOW_ERROR_NOTIFICATION,
-  useAppState
+  ACTION_SHOW_INFO_NOTIFICATION,
+  useAppState,
+  ACTION_HIDE_NOTIFICATION
 } from "../AppContext";
 import FileService from "../services/FileService";
 import "./SearchBox.css";
@@ -20,18 +22,31 @@ function SearchBox() {
 
   useEffect(() => {
     if (searchFilter != null) {
-      fileService.list(0, DEFAULT_PAGE_SIZE, searchFilter).then(response => {
-        dispatch({
-          type: ACTION_CHANGE_PAGE,
-          value: { page: response.page, files: response.files }
+      fileService
+        .list(0, DEFAULT_PAGE_SIZE, searchFilter)
+        .then(response => {
+          dispatch({
+            type: ACTION_CHANGE_PAGE,
+            value: { page: response.page, files: response.files }
+          });
+
+          if (response.files && response.files.length === 0) {
+            dispatch({
+              type: ACTION_SHOW_INFO_NOTIFICATION,
+              value: "Your search terms didn't match any file description or title"
+            });
+          } else {
+            dispatch({
+              type: ACTION_HIDE_NOTIFICATION
+            });
+          }
+        })
+        .catch(error => {
+          dispatch({
+            type: ACTION_SHOW_ERROR_NOTIFICATION,
+            value: "It was not possible to filter the dataset: " + error.message
+          });
         });
-      })
-      .catch(error => {
-        dispatch({
-          type: ACTION_SHOW_ERROR_NOTIFICATION,
-          value: "It was not possible to filter the dataset: " + error.message
-        });
-      });      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchFilter]);
