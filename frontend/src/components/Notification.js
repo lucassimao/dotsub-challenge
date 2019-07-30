@@ -6,6 +6,7 @@ import { useAppState, ACTION_HIDE_NOTIFICATION } from "../AppContext";
 function Notification() {
   const [{ notification }, dispatch] = useAppState();
 
+
   return notification ? (
     <div className={`Notification ${notification.type}`}>
       {notification.value}

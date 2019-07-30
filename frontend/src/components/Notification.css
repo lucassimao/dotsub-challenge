@@ -12,6 +12,14 @@
   margin-top: 2px;
 }
 
+.Notification.info {
+    margin: 0;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    color: #004085;
+    margin-top: 2px;
+  }
+
 .Notification .btnNotificationClose {
   position: absolute;
   right: 0.7em;
@@ -20,5 +28,5 @@
   border: 0;
   color: #000;
   font-weight: bold;
-  background-color: #f8d7da;
+  background-color: inherit;
 }

@@ -7,13 +7,14 @@ export const ACTION_RESET = "RESET";
 export const ACTION_SET_SEARCH_FILTER = "SET SEARCH FILTER";
 export const ACTION_HIDE_NOTIFICATION = "HIDE_NOTIFICATION";
 export const ACTION_SHOW_ERROR_NOTIFICATION = "SHOW_ERROR_NOTIFICATION";
+export const ACTION_SHOW_INFO_NOTIFICATION = "SHOW info notification";
 
 const INITIAL_STATE = {
   pageSize: DEFAULT_PAGE_SIZE,
   totalPages: 0,
   totalElements: 0,
   searchFilter: undefined,
-  notification:null,
+  notification: null,
   page: 0,
   files: []
 };
@@ -25,13 +26,15 @@ function appReducer(state, action) {
         page: { number: page, totalPages, size: pageSize, totalElements },
         files
       } = action.value;
-      return { ...state, page, totalPages, pageSize, totalElements, files, notification:null };
+      return { ...state, page, totalPages, pageSize, totalElements, files };
     case ACTION_RESET:
       return INITIAL_STATE;
     case ACTION_SET_SEARCH_FILTER:
       return { ...state, searchFilter: action.value };
     case ACTION_SHOW_ERROR_NOTIFICATION:
-      return { ...state, notification: {type: 'error', value:action.value} };
+      return { ...state, notification: { type: "error", value: action.value } };
+    case ACTION_SHOW_INFO_NOTIFICATION:
+      return { ...state, notification: { type: "info", value: action.value } };
     case ACTION_HIDE_NOTIFICATION:
       return { ...state, notification: null };
     default:
@@ -42,11 +45,7 @@ function appReducer(state, action) {
 const Context = createContext([INITIAL_STATE, () => {}]);
 
 function AppContext({ children }) {
-  return (
-    <Context.Provider value={useReducer(appReducer, INITIAL_STATE)}>
-      {children}
-    </Context.Provider>
-  );
+  return <Context.Provider value={useReducer(appReducer, INITIAL_STATE)}>{children}</Context.Provider>;
 }
 
 export const useAppState = () => useContext(Context);
