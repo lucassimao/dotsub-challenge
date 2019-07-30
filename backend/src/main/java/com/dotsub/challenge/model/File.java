@@ -33,6 +33,9 @@ public class File {
     @JsonIgnore
     private String dataUri;
 
+    private String originalFileName;
+    private String mimeType;
+
     public File() {
     }
 
@@ -77,6 +80,27 @@ public class File {
         this.dataUri = dataUri;
     }
 
+
+	public String getOriginalFileName() {
+		return originalFileName;
+	}
+
+
+	public void setOriginalFileName(String originalFileName) {
+		this.originalFileName = originalFileName;
+	}
+
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -85,23 +109,12 @@ public class File {
             return false;
         }
         File file = (File) o;
-        return Objects.equals(id, file.id) && Objects.equals(description, file.description) && Objects.equals(title, file.title) && Objects.equals(dateCreated, file.dateCreated) && Objects.equals(dataUri, file.dataUri);
+        return Objects.equals(id, file.id) && Objects.equals(description, file.description) && Objects.equals(title, file.title) && Objects.equals(dateCreated, file.dateCreated) && Objects.equals(dataUri, file.dataUri) && Objects.equals(originalFileName, file.originalFileName) && Objects.equals(mimeType, file.mimeType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, title, dateCreated, dataUri);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", title='" + getTitle() + "'" +
-            ", dateCreated='" + getDateCreated() + "'" +
-            ", dataUri='" + getDataUri() + "'" +
-            "}";
+        return Objects.hash(id, description, title, dateCreated, dataUri, originalFileName, mimeType);
     }
 
 

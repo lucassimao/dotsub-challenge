@@ -18,7 +18,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -55,11 +57,21 @@ public class DownloadController {
 
             }).whenCompleteAsync((data, throwable) -> {
                 if (throwable == null) {
-                    ResponseEntity<byte[]> result = ResponseEntity.ok()
-                            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
-                            .contentLength(data.length)
-                            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment") // ;filename="picture.png"
-                            .body(data);
+                    File file = optional.get();
+                    String contentDisposition = "attachment";
+                    String contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+                    BodyBuilder bodyBuilder = ResponseEntity.ok().contentLength(data.length);
+
+                    if (!StringUtils.isEmpty(file.getOriginalFileName()))
+                        contentDisposition +=  ";filename=\"" + file.getOriginalFileName() +"\"";
+                        
+                    if(!StringUtils.isEmpty(file.getMimeType()))
+                        contentType = file.getMimeType();
+
+                    bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                                .header(HttpHeaders.CONTENT_TYPE, contentType);
+
+                    ResponseEntity<byte[]> result = bodyBuilder.body(data);
 
                     deferredResult.setResult(result);
                 } else

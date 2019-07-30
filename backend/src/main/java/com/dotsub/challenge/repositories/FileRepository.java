@@ -49,6 +49,8 @@ public interface FileRepository extends PagingAndSortingRepository<File, Long>, 
             uri = this.getDataStorageService().writeFile(dto.getData());
 
             File file = new File();
+            file.setMimeType(dto.getMimeType());
+            file.setOriginalFileName(dto.getOriginalFileName());
             file.setDescription(dto.getDescription());
             file.setTitle(dto.getTitle());
             file.setDataUri(uri.toString());
@@ -78,6 +80,12 @@ public interface FileRepository extends PagingAndSortingRepository<File, Long>, 
 
         if (StringUtils.hasText(dto.getTitle()))
             entity.setTitle(dto.getTitle());
+
+        if (StringUtils.hasText(dto.getMimeType()))
+            entity.setMimeType(dto.getMimeType());
+
+        if (StringUtils.hasText(dto.getOriginalFileName()))
+            entity.setOriginalFileName(dto.getOriginalFileName());
 
         if (dto.getData() != null) {
             URI uri = null;

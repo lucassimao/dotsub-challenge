@@ -1,7 +1,5 @@
 package com.dotsub.challenge.dto;
 
-import java.util.Objects;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,6 +20,9 @@ public class FileDTO {
     private String title;
     @NotNull
     private byte[] data;
+
+    private String mimeType;
+    private String originalFileName;
 
 
     public FileDTO() {
@@ -60,30 +61,24 @@ public class FileDTO {
         this.data = data;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof FileDTO)) {
-            return false;
-        }
-        FileDTO fileDTO = (FileDTO) o;
-        return Objects.equals(id, fileDTO.id) && Objects.equals(description, fileDTO.description) && Objects.equals(title, fileDTO.title) && Objects.equals(data, fileDTO.data);
-    }
+	public String getMimeType() {
+		return mimeType;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, description, title, data);
-    }
 
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", title='" + getTitle() + "'" +
-            ", data='" + getData() + "'" +
-            "}";
-    }
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+
+	public String getOriginalFileName() {
+		return originalFileName;
+	}
+
+
+	public void setOriginalFileName(String originalFileName) {
+		this.originalFileName = originalFileName;
+	}
+
 
 }
