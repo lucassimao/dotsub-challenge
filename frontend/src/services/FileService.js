@@ -3,11 +3,11 @@ const axios = require("axios");
 class FileService {
   static BACKEND = "http://localhost:8080/files";
 
-  async list(page, pageSize,searchFilter = null) {
+  async list(page, pageSize, searchFilter = null) {
     try {
       let url = FileService.BACKEND;
       const params = { page, size: pageSize };
-      if (searchFilter){
+      if (searchFilter) {
         url += "/search/findByDescriptionOrTitle";
         params.searchTerm = searchFilter;
       }

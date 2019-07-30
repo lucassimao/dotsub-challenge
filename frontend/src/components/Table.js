@@ -29,28 +29,18 @@ function Table() {
           const pageToLoad =
             appState.files.length === 1 ? appState.page - 1 : appState.page;
           if (pageToLoad >= 0) {
-            fileService.list(pageToLoad, DEFAULT_PAGE_SIZE,appState.searchFilter).then(response => {
-              dispatch({ type: "setPage", value: response.page.number });
-              dispatch({
-                type: "setTotalPages",
-                value: response.page.totalPages
+            fileService
+              .list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter)
+              .then(response => {
+                dispatch({
+                  type: "CHANGE_PAGE",
+                  value: { page: response.page, files: response.files }
+                });
               });
-              dispatch({ type: "setPageSize", value: response.page.size });
-              dispatch({
-                type: "setTotalElements",
-                value: response.page.totalElements
-              });
-              dispatch({ type: "setFiles", value: response.files });
-            });
           } else {
-            dispatch({ type: "setPage", value: 0 });
-            dispatch({ type: "setTotalPages", value: 0 });
-            dispatch({ type: "setPageSize", value: 0 });
             dispatch({
-              type: "setTotalElements",
-              value: 0
+              type: "RESET"
             });
-            dispatch({ type: "setFiles", value: [] });
           }
         })
         .catch(error => {

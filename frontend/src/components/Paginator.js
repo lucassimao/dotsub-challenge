@@ -9,16 +9,14 @@ function Paginator() {
   const [appState, dispatch] = useAppState();
 
   const setCurrentPage = idx => {
-    fileService.list(idx, appState.pageSize,appState.searchFilter).then(response => {
-      dispatch({ type: "setPage", value: response.page.number });
-      dispatch({ type: "setTotalPages", value: response.page.totalPages });
-      dispatch({ type: "setPageSize", value: response.page.size });
-      dispatch({
-        type: "setTotalElements",
-        value: response.page.totalElements
+    fileService
+      .list(idx, appState.pageSize, appState.searchFilter)
+      .then(response => {
+        dispatch({
+          type: "CHANGE_PAGE",
+          value: { page: response.page, files: response.files }
+        });
       });
-      dispatch({ type: "setFiles", value: response.files });
-    });
   };
 
   useEffect(() => {
