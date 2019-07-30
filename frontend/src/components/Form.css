@@ -45,6 +45,7 @@
 .form-field textarea {
   width: 100%;
   line-height: 2em;
+  box-sizing: border-box;
 }
 
 .form-field label::before {
@@ -58,6 +59,19 @@
   padding: 10px 1em 1em 1em;
 }
 
-.Form .buttons :first-child {
+.Form .buttons .btnSave {
   margin-right: 10px;
+}
+
+.Form .buttons .spinner {
+    width:50px;
+}
+
+.Form .error-msg{
+    margin: 0;
+    padding: 0;
+    border: 1px solid #f5c6cb;
+    color:#721c24;
+    background-color: #f8d7da;
+    margin-top: 2px;
 }

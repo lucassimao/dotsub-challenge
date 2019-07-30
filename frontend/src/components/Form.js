@@ -1,12 +1,91 @@
-import React from "react";
-
+import React, { useState } from "react";
+import FileService from "../services/FileService";
 import "./Form.css";
+import spinner from "../resources/img/spinner.gif";
+import { useAppState, ACTION_CHANGE_PAGE, DEFAULT_PAGE_SIZE } from "../AppContext";
 
 function Form(props) {
+  const [, dispatch] = useAppState();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [validationErrors, setValidationErrors] = useState([]);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [file, setFile] = useState(null);
+
   const closeForm = props.onCancel ? props.onCancel : null;
 
+  function validateForm() {
+    const errors = [];
+    if (!file) {
+      errors.push({ field: "file", message: "A file must be selected" });
+    }
+
+    if (!title || !title.trim()) {
+      errors.push({ field: "title", message: "Title is required" });
+    }
+
+    if (!description || !description.trim()) {
+      errors.push({ field: "description", message: "Description is required" });
+    }
+
+    return errors;
+  }
+
+  function updateValidation(event) {
+    const fieldName = event.target.name;
+    const value = event.target.value;
+
+    if (value) {
+      // removing the validation error
+      const errors = validationErrors.filter(error => error.field !== fieldName);
+      setValidationErrors(errors);
+    }
+  }
+
+  function saveFile(event) {
+    event.preventDefault();
+
+    const errors = validateForm();
+
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setShowSpinner(true);
+
+    const { name, type } = file;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.addEventListener(
+      "load",
+      function() {
+        const base64EncodedFile = reader.result.split(",")[1];
+        const fileService = new FileService();
+        fileService
+          .save(title, description, base64EncodedFile, name, type)
+          .then(res => fileService.list(0, DEFAULT_PAGE_SIZE))
+          .then(response => {
+            dispatch({
+              type: ACTION_CHANGE_PAGE,
+              value: { page: response.page, files: response.files }
+            });
+            setShowSpinner(false);
+            alert("File saved");
+            closeForm();
+          })
+          .catch(error => {
+            setShowSpinner(false);
+            console.log(error);
+          });
+      },
+      false
+    );
+  }
+
   return (
-    <form className="Form">
+    <form className="Form" onSubmit={saveFile}>
       <div className="form-topbar">
         <h2>
           New <span className="bold">File</span>
@@ -17,19 +96,62 @@ function Form(props) {
       </div>
       <div className="form-field">
         <label htmlFor="inputTitle">Title: </label>
-        <input id="inputTitle" />
+        <input
+          name="title"
+          onBlur={updateValidation}
+          onChange={event => setTitle(event.target.value)}
+          id="inputTitle"
+        />
+        {validationErrors
+          .filter(error => error.field === "title")
+          .map(error => (
+            <div className="error-msg" key="description-error">
+              {error.message}
+            </div>
+          ))}
       </div>
       <div className="form-field">
         <label htmlFor="inputDescription">Description: </label>
-        <textarea rows="6" id="inputDescription" />
+        <textarea
+          onBlur={updateValidation}
+          name="description"
+          onChange={event => setDescription(event.target.value)}
+          rows="6"
+          id="inputDescription"
+        />
+        {validationErrors
+          .filter(error => error.field === "description")
+          .map(error => (
+            <div className="error-msg" key="description-error">
+              {error.message}
+            </div>
+          ))}
       </div>
       <div className="form-field">
-        <input type="file" />
+        <input
+          onBlur={updateValidation}
+          name="file"
+          onChange={event => setFile(event.target.files[0])}
+          type="file"
+        />
+        {validationErrors
+          .filter(error => error.field === "file")
+          .map(error => (
+            <div className="error-msg" key="description-error">
+              {error.message}
+            </div>
+          ))}
       </div>
 
       <div className="buttons">
-        <input type="submit" value="Save" />
-        <button onClick={closeForm}>Cancel</button>
+        {showSpinner ? (
+          <img className="spinner" alt="Loading ..." src={spinner} />
+        ) : (
+          <div>
+            <input className="btnSave" type="submit" value="Save" />
+            <button onClick={closeForm}>Cancel</button>
+          </div>
+        )}
       </div>
     </form>
   );

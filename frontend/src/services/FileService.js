@@ -6,7 +6,7 @@ class FileService {
   async list(page, pageSize, searchFilter = null) {
     try {
       let url = FileService.BACKEND;
-      const params = { page, size: pageSize };
+      const params = { page, size: pageSize, sort: "dateCreated,desc" };
       if (searchFilter) {
         url += "/search/findByDescriptionOrTitle";
         params.searchTerm = searchFilter;
@@ -33,6 +33,28 @@ class FileService {
     const selfLink = fileDetails._links.self.href;
     await axios.delete(selfLink);
     return true;
+  }
+
+  async save(title, description, base64EncodedFile, name, mimeType) {
+    try {
+      const response = await axios.post(FileService.BACKEND, {
+        title,
+        description,
+        data: base64EncodedFile,
+        mimeType,
+        originalFileName: name
+      });
+      return response.status === 201;
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      return false;
+    }
   }
 }
 

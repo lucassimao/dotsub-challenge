@@ -60,7 +60,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {appState.files.map((row, idx) => (
+        {appState.files.map((row,idx) => (
           <tr key={idx}>
             <td>{row.title}</td>
             <td>{row.description}</td>
