@@ -28,6 +28,14 @@ public class FileDTO {
     public FileDTO() {
     }
 
+    public FileDTO(String title,String description,  byte[] data, String mimeType, String originalFileName) {
+        this.description = description;
+        this.title = title;
+        this.data = data;
+        this.mimeType = mimeType;
+        this.originalFileName = originalFileName;
+    }
+
 
     public Long getId() {
         return this.id;
