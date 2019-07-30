@@ -2,11 +2,15 @@ import { faEdit, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useAppState } from "../AppContext";
-import "./Table.css";
 import FileService from "../services/FileService";
 import { DEFAULT_PAGE_SIZE } from "./App";
+import "./Table.css";
 
 const fileService = new FileService();
+
+function download(rowData){
+  window.open(rowData._links.download.href,'_blank');
+}
 
 function Table() {
   const [appState, dispatch] = useAppState();
@@ -18,9 +22,9 @@ function Table() {
         .removeFile(row)
         .then(res => {
             alert("File removed");
-          const nextPage = appState.files.length === 1 ? appState.page - 1 : appState.page;
-          if (nextPage >= 0) {
-            fileService.list(nextPage, DEFAULT_PAGE_SIZE).then(response => {
+          const pageToLoad = appState.files.length === 1 ? appState.page - 1 : appState.page;
+          if (pageToLoad >= 0) {
+            fileService.list(pageToLoad, DEFAULT_PAGE_SIZE).then(response => {
               dispatch({ type: "setPage", value: response.page.number });
               dispatch({ type: "setTotalPages", value: response.page.totalPages });
               dispatch({ type: "setPageSize", value: response.page.size });
@@ -67,7 +71,7 @@ function Table() {
             <td className="row-options center">
               <FontAwesomeIcon className="row-option-edit" icon={faEdit} />
               <FontAwesomeIcon onClick={() => removeFile(row)} className="row-option-trash" icon={faTrash} />
-              <FontAwesomeIcon className="row-option-download" icon={faFileDownload} />
+              <FontAwesomeIcon onClick={() => download(row)} className="row-option-download" icon={faFileDownload} />
             </td>
           </tr>
         ))}

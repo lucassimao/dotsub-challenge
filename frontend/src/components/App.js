@@ -37,7 +37,9 @@ function App() {
       </div>
       <AppContext initialState={initialState}>
         <SearchBox />
-        <Table />
+        <div className="table-container">
+          <Table />
+        </div>
         <Paginator />
       </AppContext>
 
