@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
-import App, { DEFAULT_PAGE_SIZE } from "../App";
+import App from "../App";
+import {DEFAULT_PAGE_SIZE} from "../../AppContext";
 
 import FileService, { mockFileServiceList } from "../../services/FileService";
 

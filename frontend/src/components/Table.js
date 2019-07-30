@@ -5,9 +5,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { useAppState,ACTION_CHANGE_PAGE, ACTION_RESET } from "../AppContext";
+import { DEFAULT_PAGE_SIZE, useAppState,ACTION_CHANGE_PAGE, ACTION_RESET } from "../AppContext";
 import FileService from "../services/FileService";
-import { DEFAULT_PAGE_SIZE } from "./App";
 import "./Table.css";
 
 const fileService = new FileService();

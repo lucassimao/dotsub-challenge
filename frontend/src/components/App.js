@@ -9,14 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../AppContext";
 
-export const DEFAULT_PAGE_SIZE = 5;
-
-const initialState = {
-  page: 0,
-  totalEntries: 0,
-  pageSize: DEFAULT_PAGE_SIZE,
-  files: []
-};
 
 function App() {
   const [mustShowForm, setShowForm] = useState(false);
@@ -35,19 +27,19 @@ function App() {
           &nbsp;New File
         </button>
       </div>
-      <AppContext initialState={initialState}>
+      <AppContext>
         <SearchBox />
         <div className="table-container">
           <Table />
         </div>
         <Paginator />
-      </AppContext>
 
-      {mustShowForm ? (
-        <Modal>
-          <Form onCancel={hideForm} />
-        </Modal>
-      ) : null}
+        {mustShowForm ? (
+          <Modal>
+            <Form onCancel={hideForm} />
+          </Modal>
+        ) : null}
+      </AppContext>
     </div>
   );
 }

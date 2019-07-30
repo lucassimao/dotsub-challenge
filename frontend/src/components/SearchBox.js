@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { ACTION_CHANGE_PAGE, ACTION_SET_SEARCH_FILTER, useAppState } from "../AppContext";
+import { DEFAULT_PAGE_SIZE, ACTION_CHANGE_PAGE, ACTION_SET_SEARCH_FILTER, useAppState } from "../AppContext";
 import FileService from "../services/FileService";
-import { DEFAULT_PAGE_SIZE } from "./App";
 import "./SearchBox.css";
 
 const fileService = new FileService();
