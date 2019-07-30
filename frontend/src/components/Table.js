@@ -1,4 +1,8 @@
-import { faEdit, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faFileDownload,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useAppState } from "../AppContext";
@@ -8,8 +12,8 @@ import "./Table.css";
 
 const fileService = new FileService();
 
-function download(rowData){
-  window.open(rowData._links.download.href,'_blank');
+function download(rowData) {
+  window.open(rowData._links.download.href, "_blank");
 }
 
 function Table() {
@@ -21,12 +25,16 @@ function Table() {
       fileService
         .removeFile(row)
         .then(res => {
-            alert("File removed");
-          const pageToLoad = appState.files.length === 1 ? appState.page - 1 : appState.page;
+          alert("File removed");
+          const pageToLoad =
+            appState.files.length === 1 ? appState.page - 1 : appState.page;
           if (pageToLoad >= 0) {
             fileService.list(pageToLoad, DEFAULT_PAGE_SIZE).then(response => {
               dispatch({ type: "setPage", value: response.page.number });
-              dispatch({ type: "setTotalPages", value: response.page.totalPages });
+              dispatch({
+                type: "setTotalPages",
+                value: response.page.totalPages
+              });
               dispatch({ type: "setPageSize", value: response.page.size });
               dispatch({
                 type: "setTotalElements",
@@ -37,7 +45,7 @@ function Table() {
           } else {
             dispatch({ type: "setPage", value: 0 });
             dispatch({ type: "setTotalPages", value: 0 });
-            dispatch({ type: "setPageSize", value:0 });
+            dispatch({ type: "setPageSize", value: 0 });
             dispatch({
               type: "setTotalElements",
               value: 0
@@ -70,8 +78,16 @@ function Table() {
             <td className="center">{row.dateCreated.toLocaleDateString()}</td>
             <td className="row-options center">
               <FontAwesomeIcon className="row-option-edit" icon={faEdit} />
-              <FontAwesomeIcon onClick={() => removeFile(row)} className="row-option-trash" icon={faTrash} />
-              <FontAwesomeIcon onClick={() => download(row)} className="row-option-download" icon={faFileDownload} />
+              <FontAwesomeIcon
+                onClick={() => removeFile(row)}
+                className="row-option-trash"
+                icon={faTrash}
+              />
+              <FontAwesomeIcon
+                onClick={() => download(row)}
+                className="row-option-download"
+                icon={faFileDownload}
+              />
             </td>
           </tr>
         ))}

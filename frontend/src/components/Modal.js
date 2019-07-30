@@ -13,7 +13,7 @@ function Modal(props) {
     //componentWillUnmount
     return () => modalRoot.removeChild(el);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  }, []);
 
   return ReactDOM.createPortal(props.children, el);
 }

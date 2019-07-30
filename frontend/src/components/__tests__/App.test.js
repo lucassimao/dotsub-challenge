@@ -43,7 +43,6 @@ it("renders without crashing", async () => {
     jest.runAllTimers();
   });
 
-
   const searchBox = container.getElementsByClassName("SearchBox")[0];
   expect(searchBox).not.toBeUndefined();
 
@@ -70,7 +69,9 @@ it("loads the initial page of data, showing in the table and configures the pagi
   expect(tableRows.length).toBe(DEFAULT_PAGE_SIZE);
 
   const paginatorPageSizeInfo = container.querySelector("#total-pages");
-  expect(paginatorPageSizeInfo.textContent).toBe(String(100/DEFAULT_PAGE_SIZE));
+  expect(paginatorPageSizeInfo.textContent).toBe(
+    String(100 / DEFAULT_PAGE_SIZE)
+  );
 
   const paginatorTotalEntriesInfo = container.querySelector("#total-entries");
   expect(paginatorTotalEntriesInfo.textContent).toBe("100");

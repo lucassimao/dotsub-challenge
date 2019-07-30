@@ -45,11 +45,15 @@ it("should show buttons appropriately", async () => {
   });
 
   // 1 button for the 10 pages and the 'Next' button
-  let paginatorButtons = document.querySelectorAll(".Paginator .buttons button");
-  expect(paginatorButtons.length).toBe(100/DEFAULT_PAGE_SIZE + 1);
+  let paginatorButtons = document.querySelectorAll(
+    ".Paginator .buttons button"
+  );
+  expect(paginatorButtons.length).toBe(100 / DEFAULT_PAGE_SIZE + 1);
 
   // buton '1' must be active
-  let selectedPaginatorButton = container.querySelector(".Paginator .buttons .active");
+  let selectedPaginatorButton = container.querySelector(
+    ".Paginator .buttons .active"
+  );
   expect(selectedPaginatorButton.textContent).toBe("1");
 
   // last button must be the 'Next' button
@@ -63,14 +67,18 @@ it("should show buttons appropriately", async () => {
   // when the 'Next' button is clicked for the very fist time, there must be 12 buttons
   // because the 'Previous' button is show
   paginatorButtons = document.querySelectorAll(".Paginator .buttons button");
-  expect(paginatorButtons.length).toBe(100/DEFAULT_PAGE_SIZE + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
+  expect(paginatorButtons.length).toBe(100 / DEFAULT_PAGE_SIZE + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
 
   // ... and the button '2' is the active one
-  selectedPaginatorButton = container.querySelector(".Paginator .buttons .active");
+  selectedPaginatorButton = container.querySelector(
+    ".Paginator .buttons .active"
+  );
   expect(selectedPaginatorButton.textContent).toBe("2");
 
   // given the last numerical button , when clicked, the 'next' button must hide, once there is not next pages
-  let lastButOneButton = document.querySelector(".Paginator .buttons :nth-last-child(2)");
+  let lastButOneButton = document.querySelector(
+    ".Paginator .buttons :nth-last-child(2)"
+  );
 
   act(() => {
     lastButOneButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -81,7 +89,6 @@ it("should show buttons appropriately", async () => {
 });
 
 it("FileService should request new pages to the backend when buttons are clicked", async () => {
-    
   act(() => {
     ReactDOM.render(<App />, container);
   });
@@ -89,7 +96,6 @@ it("FileService should request new pages to the backend when buttons are clicked
   await act(async () => {
     jest.runAllTimers();
   });
-
 
   let nextButton = container.querySelector(".Paginator .buttons :last-child");
   expect(nextButton.textContent).toBe("Next");
@@ -102,7 +108,6 @@ it("FileService should request new pages to the backend when buttons are clicked
     jest.runAllTimers();
   });
 
-
   act(() => {
     nextButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
@@ -113,8 +118,7 @@ it("FileService should request new pages to the backend when buttons are clicked
 
   // the 2 click on the button next + on first render of the component
   expect(mockFileServiceList.mock.calls.length).toBe(3);
-  expect(mockFileServiceList.mock.calls[0]).toEqual([0,DEFAULT_PAGE_SIZE]);
-  expect(mockFileServiceList.mock.calls[1]).toEqual([1,DEFAULT_PAGE_SIZE]);
-  expect(mockFileServiceList.mock.calls[2]).toEqual([2,DEFAULT_PAGE_SIZE]);
-  
+  expect(mockFileServiceList.mock.calls[0]).toEqual([0, DEFAULT_PAGE_SIZE]);
+  expect(mockFileServiceList.mock.calls[1]).toEqual([1, DEFAULT_PAGE_SIZE]);
+  expect(mockFileServiceList.mock.calls[2]).toEqual([2, DEFAULT_PAGE_SIZE]);
 });

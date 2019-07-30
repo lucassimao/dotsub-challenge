@@ -19,15 +19,14 @@ export const mockFileServiceList = jest.fn((page, pageSize) => {
     });
   }
 
-  return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-          resolve({
-            files: backendMockedResponse._embedded.files,
-            page: backendMockedResponse.page
-          })
-      },2000);
-  })
-
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({
+        files: backendMockedResponse._embedded.files,
+        page: backendMockedResponse.page
+      });
+    }, 2000);
+  });
 });
 
 const mock = jest.fn().mockImplementation(() => {
