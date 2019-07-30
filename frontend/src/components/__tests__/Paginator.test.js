@@ -2,8 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
 import App from "../App";
-import {DEFAULT_PAGE_SIZE} from "../../AppContext";
-
+import { DEFAULT_PAGE_SIZE } from "../../AppContext";
 
 import FileService, { mockFileServiceList } from "../../services/FileService";
 
@@ -72,7 +71,7 @@ it("should show buttons appropriately", async () => {
 
   // when the 'Next' button is clicked for the very fist time, buttons for each page plus 'Next' and 'Previous'
   paginatorButtons = document.querySelectorAll(".Paginator .buttons button");
-  expect(paginatorButtons.length).toBe( Math.ceil(100 / DEFAULT_PAGE_SIZE) + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
+  expect(paginatorButtons.length).toBe(Math.ceil(100 / DEFAULT_PAGE_SIZE) + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
 
   // ... and the button '2' is the active one
   selectedPaginatorButton = container.querySelector(
@@ -91,8 +90,6 @@ it("should show buttons appropriately", async () => {
   await act(async () => {
     jest.runAllTimers();
   });
-  
-
 
   lastButton = container.querySelector(".Paginator .buttons :last-child");
   expect(lastButton.textContent).not.toBe("Next");
@@ -128,7 +125,19 @@ it("FileService should request new pages to the backend when buttons are clicked
 
   // the 2 click on the button next + on first render of the component
   expect(mockFileServiceList.mock.calls.length).toBe(3);
-  expect(mockFileServiceList.mock.calls[0]).toEqual([0, DEFAULT_PAGE_SIZE,undefined]);
-  expect(mockFileServiceList.mock.calls[1]).toEqual([1, DEFAULT_PAGE_SIZE,undefined]);
-  expect(mockFileServiceList.mock.calls[2]).toEqual([2, DEFAULT_PAGE_SIZE,undefined]);
+  expect(mockFileServiceList.mock.calls[0]).toEqual([
+    0,
+    DEFAULT_PAGE_SIZE,
+    undefined
+  ]);
+  expect(mockFileServiceList.mock.calls[1]).toEqual([
+    1,
+    DEFAULT_PAGE_SIZE,
+    undefined
+  ]);
+  expect(mockFileServiceList.mock.calls[2]).toEqual([
+    2,
+    DEFAULT_PAGE_SIZE,
+    undefined
+  ]);
 });

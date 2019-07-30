@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import FileService from "../services/FileService";
 import "./Form.css";
 import spinner from "../resources/img/spinner.gif";
-import { useAppState, ACTION_CHANGE_PAGE, DEFAULT_PAGE_SIZE } from "../AppContext";
+import {
+  useAppState,
+  ACTION_CHANGE_PAGE,
+  DEFAULT_PAGE_SIZE
+} from "../AppContext";
 
 function Form(props) {
   const [, dispatch] = useAppState();
@@ -46,7 +50,9 @@ function Form(props) {
 
     if (value) {
       // removing the validation error
-      const errors = validationErrors.filter(error => error.field !== fieldName);
+      const errors = validationErrors.filter(
+        error => error.field !== fieldName
+      );
       setValidationErrors(errors);
     }
   }
@@ -76,9 +82,22 @@ function Form(props) {
 
         if (props.fileToEdit) {
           const endpoint = props.fileToEdit._links.self.href;
-          promise = fileService.update(endpoint, title, description, base64EncodedFile, name, type);
+          promise = fileService.update(
+            endpoint,
+            title,
+            description,
+            base64EncodedFile,
+            name,
+            type
+          );
         } else {
-          promise = fileService.save(title, description, base64EncodedFile, name, type);
+          promise = fileService.save(
+            title,
+            description,
+            base64EncodedFile,
+            name,
+            type
+          );
         }
 
         promise

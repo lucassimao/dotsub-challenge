@@ -64,14 +64,14 @@
 }
 
 .Form .buttons .spinner {
-    width:50px;
+  width: 50px;
 }
 
-.Form .error-msg{
-    margin: 0;
-    padding: 0;
-    border: 1px solid #f5c6cb;
-    color:#721c24;
-    background-color: #f8d7da;
-    margin-top: 2px;
+.Form .error-msg {
+  margin: 0;
+  padding: 0;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  background-color: #f8d7da;
+  margin-top: 2px;
 }

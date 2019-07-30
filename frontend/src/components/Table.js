@@ -1,7 +1,16 @@
-import { faEdit, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faFileDownload,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React,{useState} from "react";
-import { ACTION_CHANGE_PAGE, ACTION_RESET, DEFAULT_PAGE_SIZE, useAppState } from "../AppContext";
+import React, { useState } from "react";
+import {
+  ACTION_CHANGE_PAGE,
+  ACTION_RESET,
+  DEFAULT_PAGE_SIZE,
+  useAppState
+} from "../AppContext";
 import FileService from "../services/FileService";
 import Form from "./Form";
 import Modal from "./Modal";
@@ -24,14 +33,17 @@ function Table() {
         .removeFile(row)
         .then(res => {
           alert("File removed");
-          const pageToLoad = appState.files.length === 1 ? appState.page - 1 : appState.page;
+          const pageToLoad =
+            appState.files.length === 1 ? appState.page - 1 : appState.page;
           if (pageToLoad >= 0) {
-            fileService.list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter).then(response => {
-              dispatch({
-                type: ACTION_CHANGE_PAGE,
-                value: { page: response.page, files: response.files }
+            fileService
+              .list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter)
+              .then(response => {
+                dispatch({
+                  type: ACTION_CHANGE_PAGE,
+                  value: { page: response.page, files: response.files }
+                });
               });
-            });
           } else {
             dispatch({
               type: ACTION_RESET
@@ -63,7 +75,11 @@ function Table() {
               <td>{row.description}</td>
               <td className="center">{row.dateCreated.toLocaleDateString()}</td>
               <td className="row-options center">
-                <FontAwesomeIcon onClick={()=> setFileToEdit(row) } className="row-option-edit" icon={faEdit} />
+                <FontAwesomeIcon
+                  onClick={() => setFileToEdit(row)}
+                  className="row-option-edit"
+                  icon={faEdit}
+                />
                 <FontAwesomeIcon
                   onClick={() => removeFile(row)}
                   className="row-option-trash"
@@ -81,7 +97,7 @@ function Table() {
       </table>
       {fileToEdit ? (
         <Modal>
-          <Form fileToEdit={fileToEdit} onCancel={()=> setFileToEdit(null)} />
+          <Form fileToEdit={fileToEdit} onCancel={() => setFileToEdit(null)} />
         </Modal>
       ) : null}
     </React.Fragment>

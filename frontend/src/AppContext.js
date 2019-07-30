@@ -35,7 +35,11 @@ function appReducer(state, action) {
 const Context = createContext([INITIAL_STATE, () => {}]);
 
 function AppContext({ children }) {
-  return <Context.Provider value={useReducer(appReducer, INITIAL_STATE)}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={useReducer(appReducer, INITIAL_STATE)}>
+      {children}
+    </Context.Provider>
+  );
 }
 
 export const useAppState = () => useContext(Context);

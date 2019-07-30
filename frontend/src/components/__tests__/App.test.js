@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { act } from "react-dom/test-utils";
 import App from "../App";
-import {DEFAULT_PAGE_SIZE} from "../../AppContext";
+import { DEFAULT_PAGE_SIZE } from "../../AppContext";
 
 import FileService, { mockFileServiceList } from "../../services/FileService";
 
@@ -63,7 +63,11 @@ it("loads the initial page of data, showing in the table and configures the pagi
     jest.runAllTimers();
   });
 
-  expect(mockFileServiceList).toHaveBeenCalledWith(0, DEFAULT_PAGE_SIZE,undefined);
+  expect(mockFileServiceList).toHaveBeenCalledWith(
+    0,
+    DEFAULT_PAGE_SIZE,
+    undefined
+  );
 
   const tableRows = container.querySelectorAll("table tbody tr");
   // table must have as much rows as the default paging size
@@ -119,7 +123,7 @@ it("loads the appropriate page of data after clicking the paginator's buttons", 
   await act(async () => {
     jest.runAllTimers();
   });
-  
+
   selectedPaginatorButton = container.querySelector(
     ".Paginator .buttons .active"
   );

@@ -35,7 +35,14 @@ class FileService {
     return true;
   }
 
-  async update(resourceEndpoint, title, description, base64EncodedFile, name, mimeType) {
+  async update(
+    resourceEndpoint,
+    title,
+    description,
+    base64EncodedFile,
+    name,
+    mimeType
+  ) {
     try {
       const response = await axios.put(resourceEndpoint, {
         title,

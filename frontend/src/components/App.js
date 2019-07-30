@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../AppContext";
 
-
 function App() {
   const [mustShowForm, setShowForm] = useState(false);
 
