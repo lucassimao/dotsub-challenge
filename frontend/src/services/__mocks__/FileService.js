@@ -11,7 +11,7 @@ export const mockFileServiceList = jest.fn((page, pageSize) => {
     }
   };
 
-  for (let i = 0; i < 10; ++i) {
+  for (let i = 0; i < pageSize; ++i) {
     backendMockedResponse._embedded.files.push({
       name: `File ${i} - Page ${page}`,
       description: `Description for file ${i}`,

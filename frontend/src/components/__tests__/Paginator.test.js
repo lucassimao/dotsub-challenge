@@ -46,7 +46,7 @@ it("should show buttons appropriately", async () => {
 
   // 1 button for the 10 pages and the 'Next' button
   let paginatorButtons = document.querySelectorAll(".Paginator .buttons button");
-  expect(paginatorButtons.length).toBe(11);
+  expect(paginatorButtons.length).toBe(100/DEFAULT_PAGE_SIZE + 1);
 
   // buton '1' must be active
   let selectedPaginatorButton = container.querySelector(".Paginator .buttons .active");
@@ -63,25 +63,21 @@ it("should show buttons appropriately", async () => {
   // when the 'Next' button is clicked for the very fist time, there must be 12 buttons
   // because the 'Previous' button is show
   paginatorButtons = document.querySelectorAll(".Paginator .buttons button");
-  expect(paginatorButtons.length).toBe(12); // 'Previous' button, 10 buttons for each page, 'Next' button
+  expect(paginatorButtons.length).toBe(100/DEFAULT_PAGE_SIZE + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
 
   // ... and the button '2' is the active one
   selectedPaginatorButton = container.querySelector(".Paginator .buttons .active");
   expect(selectedPaginatorButton.textContent).toBe("2");
 
-  // given the button '10', when clicked, the 'next' button must hide, once there is not next pages
-  let _10thPageButton = document.querySelector(".Paginator .buttons :nth-last-child(2)");
-  expect(_10thPageButton.textContent).toBe("10");
+  // given the last numerical button , when clicked, the 'next' button must hide, once there is not next pages
+  let lastButOneButton = document.querySelector(".Paginator .buttons :nth-last-child(2)");
 
   act(() => {
-    _10thPageButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    lastButOneButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
 
-  selectedPaginatorButton = container.querySelector(".Paginator .buttons .active");
-  expect(selectedPaginatorButton.textContent).toBe("10");
-
   lastButton = container.querySelector(".Paginator .buttons :last-child");
-  expect(lastButton.textContent).toBe("10");
+  expect(lastButton.textContent).not.toBe("Next");
 });
 
 it("FileService should request new pages to the backend when buttons are clicked", async () => {

@@ -37,10 +37,11 @@ function Paginator() {
       <span className="info">
         Page nº 
         <span className="bold">
-        {` ${appState.page+1} of `}
+        {` ${appState.page+1} `}
         </span>
-        <span id="page-size" className="bold">
-          {appState.pageSize}
+        of
+        <span id="total-pages" className="bold">
+          {appState.totalPages}
         </span>
         {" | Total of "}
         <span id="total-entries" className="bold">

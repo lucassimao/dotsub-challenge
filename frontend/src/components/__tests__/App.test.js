@@ -69,8 +69,8 @@ it("loads the initial page of data, showing in the table and configures the pagi
   // table must have as much rows as the default paging size
   expect(tableRows.length).toBe(DEFAULT_PAGE_SIZE);
 
-  const paginatorPageSizeInfo = container.querySelector("#page-size");
-  expect(paginatorPageSizeInfo.textContent).toBe("10");
+  const paginatorPageSizeInfo = container.querySelector("#total-pages");
+  expect(paginatorPageSizeInfo.textContent).toBe(String(100/DEFAULT_PAGE_SIZE));
 
   const paginatorTotalEntriesInfo = container.querySelector("#total-entries");
   expect(paginatorTotalEntriesInfo.textContent).toBe("100");
