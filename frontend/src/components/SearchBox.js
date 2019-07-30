@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import "./SearchBox.css";
+import { ACTION_CHANGE_PAGE, ACTION_SET_SEARCH_FILTER, useAppState } from "../AppContext";
 import FileService from "../services/FileService";
 import { DEFAULT_PAGE_SIZE } from "./App";
-import { useAppState } from "../AppContext";
+import "./SearchBox.css";
 
 const fileService = new FileService();
 
@@ -10,14 +10,14 @@ function SearchBox() {
   const [{ searchFilter }, dispatch] = useAppState();
 
   function setSearchFilter(value) {
-    dispatch({ type: "setSearchFilter", value });
+    dispatch({ type: ACTION_SET_SEARCH_FILTER, value });
   }
 
   useEffect(() => {
     if (searchFilter != null) {
       fileService.list(0, DEFAULT_PAGE_SIZE, searchFilter).then(response => {
         dispatch({
-          type: "CHANGE_PAGE",
+          type: ACTION_CHANGE_PAGE,
           value: { page: response.page, files: response.files }
         });
       });

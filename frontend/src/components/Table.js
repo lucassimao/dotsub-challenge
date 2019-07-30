@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { useAppState } from "../AppContext";
+import { useAppState,ACTION_CHANGE_PAGE, ACTION_RESET } from "../AppContext";
 import FileService from "../services/FileService";
 import { DEFAULT_PAGE_SIZE } from "./App";
 import "./Table.css";
@@ -33,13 +33,13 @@ function Table() {
               .list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter)
               .then(response => {
                 dispatch({
-                  type: "CHANGE_PAGE",
+                  type: ACTION_CHANGE_PAGE,
                   value: { page: response.page, files: response.files }
                 });
               });
           } else {
             dispatch({
-              type: "RESET"
+              type: ACTION_RESET
             });
           }
         })

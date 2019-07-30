@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./Paginator.css";
-import { useAppState } from "../AppContext";
+import { useAppState, ACTION_CHANGE_PAGE } from "../AppContext";
 import FileService from "../services/FileService";
 
 const fileService = new FileService();
@@ -13,7 +13,7 @@ function Paginator() {
       .list(idx, appState.pageSize, appState.searchFilter)
       .then(response => {
         dispatch({
-          type: "CHANGE_PAGE",
+          type: ACTION_CHANGE_PAGE,
           value: { page: response.page, files: response.files }
         });
       });
