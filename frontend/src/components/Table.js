@@ -29,7 +29,7 @@ function Table() {
           const pageToLoad =
             appState.files.length === 1 ? appState.page - 1 : appState.page;
           if (pageToLoad >= 0) {
-            fileService.list(pageToLoad, DEFAULT_PAGE_SIZE).then(response => {
+            fileService.list(pageToLoad, DEFAULT_PAGE_SIZE,appState.searchFilter).then(response => {
               dispatch({ type: "setPage", value: response.page.number });
               dispatch({
                 type: "setTotalPages",

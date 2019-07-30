@@ -9,7 +9,7 @@ function Paginator() {
   const [appState, dispatch] = useAppState();
 
   const setCurrentPage = idx => {
-    fileService.list(idx, appState.pageSize).then(response => {
+    fileService.list(idx, appState.pageSize,appState.searchFilter).then(response => {
       dispatch({ type: "setPage", value: response.page.number });
       dispatch({ type: "setTotalPages", value: response.page.totalPages });
       dispatch({ type: "setPageSize", value: response.page.size });
