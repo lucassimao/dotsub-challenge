@@ -8,10 +8,10 @@ import SearchBox from "./SearchBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import AppContext from "../AppContext";
+import Notification from "./Notification";
 
 function App() {
   const [mustShowForm, setShowForm] = useState(false);
-
   const showForm = () => setShowForm(true);
   const hideForm = () => setShowForm(false);
 
@@ -26,21 +26,25 @@ function App() {
           &nbsp;New File
         </button>
       </div>
-      <AppContext>
-        <SearchBox />
-        <div className="table-container">
-          <Table />
-        </div>
-        <Paginator />
 
-        {mustShowForm ? (
-          <Modal>
-            <Form onCancel={hideForm} />
-          </Modal>
-        ) : null}
-      </AppContext>
+      <SearchBox />
+      <Notification />
+      <div className="table-container">
+        <Table />
+      </div>
+      <Paginator />
+
+      {mustShowForm ? (
+        <Modal>
+          <Form onCancel={hideForm} />
+        </Modal>
+      ) : null}
     </div>
   );
 }
 
-export default App;
+export default () => (
+  <AppContext>
+    <App />
+  </AppContext>
+);

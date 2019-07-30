@@ -22,10 +22,8 @@ class FileService {
         })
       };
     } catch (error) {
-      console.error(error);
-      return {
-        error
-      };
+      console.error('Error while listing files ... ',error);
+      throw error;
     }
   }
 

@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import "./Paginator.css";
-import { useAppState, ACTION_CHANGE_PAGE } from "../AppContext";
+import {
+  useAppState,
+  ACTION_CHANGE_PAGE,
+  ACTION_SHOW_ERROR_NOTIFICATION
+} from "../AppContext";
 import FileService from "../services/FileService";
 
 const fileService = new FileService();
@@ -15,6 +19,12 @@ function Paginator() {
         dispatch({
           type: ACTION_CHANGE_PAGE,
           value: { page: response.page, files: response.files }
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: ACTION_SHOW_ERROR_NOTIFICATION,
+          value: "It was not possible to obtain the files: " + error.message
         });
       });
   };
