@@ -23,8 +23,6 @@ function appReducer(state, action) {
         files
       } = action.value;
       return { ...state, page, totalPages, pageSize, totalElements, files };
-    case ACTION_SET_FILES:
-      return { ...state, files: action.value };
     case ACTION_RESET:
       return INITIAL_STATE;
     case ACTION_SET_SEARCH_FILTER:
