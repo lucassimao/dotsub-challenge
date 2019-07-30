@@ -3,6 +3,7 @@ import {
   DEFAULT_PAGE_SIZE,
   ACTION_CHANGE_PAGE,
   ACTION_SET_SEARCH_FILTER,
+  ACTION_SHOW_ERROR_NOTIFICATION,
   useAppState
 } from "../AppContext";
 import FileService from "../services/FileService";
@@ -24,7 +25,13 @@ function SearchBox() {
           type: ACTION_CHANGE_PAGE,
           value: { page: response.page, files: response.files }
         });
-      });
+      })
+      .catch(error => {
+        dispatch({
+          type: ACTION_SHOW_ERROR_NOTIFICATION,
+          value: "It was not possible to filter the dataset: " + error.message
+        });
+      });      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchFilter]);

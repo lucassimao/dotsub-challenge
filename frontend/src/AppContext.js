@@ -25,7 +25,7 @@ function appReducer(state, action) {
         page: { number: page, totalPages, size: pageSize, totalElements },
         files
       } = action.value;
-      return { ...state, page, totalPages, pageSize, totalElements, files };
+      return { ...state, page, totalPages, pageSize, totalElements, files, notification:null };
     case ACTION_RESET:
       return INITIAL_STATE;
     case ACTION_SET_SEARCH_FILTER:
