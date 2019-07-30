@@ -1,25 +1,17 @@
 package com.dotsub.challenge;
 
-import static java.io.File.createTempFile;
-
-import java.io.IOException;
 import java.nio.file.Files;
-import java.time.ZonedDateTime;
-import java.util.stream.IntStream;
 
 import com.dotsub.challenge.dto.FileDTO;
-import com.dotsub.challenge.model.File;
 import com.dotsub.challenge.repositories.FileRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.util.MimeType;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
