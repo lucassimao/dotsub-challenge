@@ -5,7 +5,7 @@ function DialogBox(props) {
   const { onOK, onCancel, message } = props;
 
   return (
-    <div  className="DialogBox">
+    <div className="DialogBox">
       <h3 className="header">Confirmation</h3>
       <p className="body">{message}</p>
       <div className="buttons">

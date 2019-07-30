@@ -5,7 +5,9 @@ import spinner from "../resources/img/spinner.gif";
 import {
   useAppState,
   ACTION_CHANGE_PAGE,
-  DEFAULT_PAGE_SIZE
+  ACTION_SHOW_INFO_NOTIFICATION,
+  DEFAULT_PAGE_SIZE,
+  ACTION_SHOW_ERROR_NOTIFICATION
 } from "../AppContext";
 
 function Form(props) {
@@ -108,12 +110,35 @@ function Form(props) {
               value: { page: response.page, files: response.files }
             });
             setShowSpinner(false);
-            alert("File saved");
+
+            const msg = props.fileToEdit
+              ? "File was successfully updated"
+              : "File was successfully saved";
+            dispatch({
+              type: ACTION_SHOW_INFO_NOTIFICATION,
+              value: msg
+            });
+
             closeForm();
           })
           .catch(error => {
             setShowSpinner(false);
-            console.log(error);
+            console.error("error while saving/updating file ...");
+            console.dir(error);
+
+            let msg = error.message;
+            if (error.response && error.response.data) {
+              const {
+                response: {
+                  data: { error: summary, message }
+                }
+              } = error;
+              msg = summary + ": " + message;
+            }
+            dispatch({
+              type: ACTION_SHOW_ERROR_NOTIFICATION,
+              value: "It was not possible to save/update the file: " + msg
+            });
           });
       },
       false

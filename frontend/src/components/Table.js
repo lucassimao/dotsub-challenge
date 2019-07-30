@@ -1,4 +1,8 @@
-import { faEdit, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faFileDownload,
+  faTrash
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import {
@@ -30,14 +34,17 @@ function Table() {
     fileService
       .removeFile(fileToRemove)
       .then(res => {
-        const pageToLoad = appState.files.length === 1 ? appState.page - 1 : appState.page;
+        const pageToLoad =
+          appState.files.length === 1 ? appState.page - 1 : appState.page;
         if (pageToLoad >= 0) {
-          fileService.list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter).then(response => {
-            dispatch({
-              type: ACTION_CHANGE_PAGE,
-              value: { page: response.page, files: response.files }
+          fileService
+            .list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter)
+            .then(response => {
+              dispatch({
+                type: ACTION_CHANGE_PAGE,
+                value: { page: response.page, files: response.files }
+              });
             });
-          });
         } else {
           dispatch({
             type: ACTION_RESET
@@ -52,7 +59,7 @@ function Table() {
       .catch(error => {
         console.error("error while removing the file ...");
         console.dir(error);
-        
+
         dispatch({
           type: ACTION_SHOW_ERROR_NOTIFICATION,
           value: "It was not possible to remove the file: " + error.message
@@ -109,7 +116,11 @@ function Table() {
 
       {fileToRemove ? (
         <Modal>
-          <DialogBox message="Sure ?" onOK={removeFile} onCancel={() => setFileToRemove(null)} />
+          <DialogBox
+            message="Sure ?"
+            onOK={removeFile}
+            onCancel={() => setFileToRemove(null)}
+          />
         </Modal>
       ) : null}
     </React.Fragment>

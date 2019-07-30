@@ -33,7 +33,8 @@ function SearchBox() {
           if (response.files && response.files.length === 0) {
             dispatch({
               type: ACTION_SHOW_INFO_NOTIFICATION,
-              value: "Your search terms didn't match any file description or title"
+              value:
+                "Your search terms didn't match any file description or title"
             });
           } else {
             dispatch({
