@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.dotsub</groupId>
 	<artifactId>challenge</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>challenge</name>
 	<description>Simple web project,  with a form to upload a file as well as some metadata for that file: Title, Description and Creation date</description>
 
