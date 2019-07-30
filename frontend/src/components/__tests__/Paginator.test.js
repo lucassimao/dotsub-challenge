@@ -48,7 +48,7 @@ it("should show buttons appropriately", async () => {
   let paginatorButtons = document.querySelectorAll(
     ".Paginator .buttons button"
   );
-  expect(paginatorButtons.length).toBe(100 / DEFAULT_PAGE_SIZE + 1);
+  expect(paginatorButtons.length).toBe(Math.ceil(100 / DEFAULT_PAGE_SIZE) + 1);
 
   // buton '1' must be active
   let selectedPaginatorButton = container.querySelector(
@@ -64,10 +64,13 @@ it("should show buttons appropriately", async () => {
     lastButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
 
-  // when the 'Next' button is clicked for the very fist time, there must be 12 buttons
-  // because the 'Previous' button is show
+  await act(async () => {
+    jest.runAllTimers();
+  });
+
+  // when the 'Next' button is clicked for the very fist time, buttons for each page plus 'Next' and 'Previous'
   paginatorButtons = document.querySelectorAll(".Paginator .buttons button");
-  expect(paginatorButtons.length).toBe(100 / DEFAULT_PAGE_SIZE + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
+  expect(paginatorButtons.length).toBe( Math.ceil(100 / DEFAULT_PAGE_SIZE) + 2); // 'Previous' button, 10 buttons for each page, 'Next' button
 
   // ... and the button '2' is the active one
   selectedPaginatorButton = container.querySelector(
@@ -83,6 +86,11 @@ it("should show buttons appropriately", async () => {
   act(() => {
     lastButOneButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
+  await act(async () => {
+    jest.runAllTimers();
+  });
+  
+
 
   lastButton = container.querySelector(".Paginator .buttons :last-child");
   expect(lastButton.textContent).not.toBe("Next");
@@ -118,7 +126,7 @@ it("FileService should request new pages to the backend when buttons are clicked
 
   // the 2 click on the button next + on first render of the component
   expect(mockFileServiceList.mock.calls.length).toBe(3);
-  expect(mockFileServiceList.mock.calls[0]).toEqual([0, DEFAULT_PAGE_SIZE]);
-  expect(mockFileServiceList.mock.calls[1]).toEqual([1, DEFAULT_PAGE_SIZE]);
-  expect(mockFileServiceList.mock.calls[2]).toEqual([2, DEFAULT_PAGE_SIZE]);
+  expect(mockFileServiceList.mock.calls[0]).toEqual([0, DEFAULT_PAGE_SIZE,undefined]);
+  expect(mockFileServiceList.mock.calls[1]).toEqual([1, DEFAULT_PAGE_SIZE,undefined]);
+  expect(mockFileServiceList.mock.calls[2]).toEqual([2, DEFAULT_PAGE_SIZE,undefined]);
 });

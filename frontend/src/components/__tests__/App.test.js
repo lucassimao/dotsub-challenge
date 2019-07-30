@@ -62,15 +62,15 @@ it("loads the initial page of data, showing in the table and configures the pagi
     jest.runAllTimers();
   });
 
-  expect(mockFileServiceList).toHaveBeenCalledWith(0, DEFAULT_PAGE_SIZE);
+  expect(mockFileServiceList).toHaveBeenCalledWith(0, DEFAULT_PAGE_SIZE,undefined);
 
   const tableRows = container.querySelectorAll("table tbody tr");
   // table must have as much rows as the default paging size
   expect(tableRows.length).toBe(DEFAULT_PAGE_SIZE);
 
   const paginatorPageSizeInfo = container.querySelector("#total-pages");
-  expect(paginatorPageSizeInfo.textContent).toBe(
-    String(100 / DEFAULT_PAGE_SIZE)
+  expect(paginatorPageSizeInfo.textContent.trim()).toBe(
+    String(Math.ceil(100 / DEFAULT_PAGE_SIZE))
   );
 
   const paginatorTotalEntriesInfo = container.querySelector("#total-entries");
@@ -98,6 +98,10 @@ it("loads the appropriate page of data after clicking the paginator's buttons", 
     buttonNext.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
 
+  await act(async () => {
+    jest.runAllTimers();
+  });
+
   let selectedPaginatorButton = container.querySelector(
     ".Paginator .buttons .active"
   );
@@ -111,6 +115,10 @@ it("loads the appropriate page of data after clicking the paginator's buttons", 
     button9.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
 
+  await act(async () => {
+    jest.runAllTimers();
+  });
+  
   selectedPaginatorButton = container.querySelector(
     ".Paginator .buttons .active"
   );

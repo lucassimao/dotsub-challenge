@@ -6,7 +6,7 @@ export const mockFileServiceList = jest.fn((page, pageSize) => {
     page: {
       size: pageSize,
       totalElements: 100,
-      totalPages: 100 / pageSize,
+      totalPages: Math.ceil(100 / pageSize),
       number: page
     }
   };
