@@ -8,6 +8,9 @@ import com.dotsub.challenge.model.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,9 @@ import org.springframework.util.StringUtils;
  */
 @RepositoryRestResource(path = "files")
 public interface FileRepository extends PagingAndSortingRepository<File, Long>, CustomFileRepository {
+
+    @Query("select f from File f where LOWER(f.description) LIKE LOWER('%' || ?1 || '%') OR LOWER(f.title) LIKE LOWER('%' || ?1 || '%')")
+    Page<File> findByDescriptionOrTitle(String searchTerm,Pageable pageable);
 
     @Override
     default void delete(File entity) {
