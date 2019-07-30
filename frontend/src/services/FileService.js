@@ -35,6 +35,28 @@ class FileService {
     return true;
   }
 
+  async update(resourceEndpoint, title, description, base64EncodedFile, name, mimeType) {
+    try {
+      const response = await axios.put(resourceEndpoint, {
+        title,
+        description,
+        data: base64EncodedFile,
+        mimeType,
+        originalFileName: name
+      });
+      return response.status === 201;
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      return false;
+    }
+  }
+
   async save(title, description, base64EncodedFile, name, mimeType) {
     try {
       const response = await axios.post(FileService.BACKEND, {

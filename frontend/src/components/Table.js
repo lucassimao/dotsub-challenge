@@ -1,12 +1,10 @@
-import {
-  faEdit,
-  faFileDownload,
-  faTrash
-} from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faFileDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { DEFAULT_PAGE_SIZE, useAppState,ACTION_CHANGE_PAGE, ACTION_RESET } from "../AppContext";
+import React,{useState} from "react";
+import { ACTION_CHANGE_PAGE, ACTION_RESET, DEFAULT_PAGE_SIZE, useAppState } from "../AppContext";
 import FileService from "../services/FileService";
+import Form from "./Form";
+import Modal from "./Modal";
 import "./Table.css";
 
 const fileService = new FileService();
@@ -17,6 +15,7 @@ function download(rowData) {
 
 function Table() {
   const [appState, dispatch] = useAppState();
+  const [fileToEdit, setFileToEdit] = useState(null);
 
   const removeFile = row => {
     const confirmation = window.confirm("Sure ?");
@@ -25,17 +24,14 @@ function Table() {
         .removeFile(row)
         .then(res => {
           alert("File removed");
-          const pageToLoad =
-            appState.files.length === 1 ? appState.page - 1 : appState.page;
+          const pageToLoad = appState.files.length === 1 ? appState.page - 1 : appState.page;
           if (pageToLoad >= 0) {
-            fileService
-              .list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter)
-              .then(response => {
-                dispatch({
-                  type: ACTION_CHANGE_PAGE,
-                  value: { page: response.page, files: response.files }
-                });
+            fileService.list(pageToLoad, DEFAULT_PAGE_SIZE, appState.searchFilter).then(response => {
+              dispatch({
+                type: ACTION_CHANGE_PAGE,
+                value: { page: response.page, files: response.files }
               });
+            });
           } else {
             dispatch({
               type: ACTION_RESET
@@ -50,38 +46,45 @@ function Table() {
   };
 
   return (
-    <table className="Table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th className="center">Created at</th>
-          <th className="center">Options</th>
-        </tr>
-      </thead>
-      <tbody>
-        {appState.files.map((row,idx) => (
-          <tr key={idx}>
-            <td>{row.title}</td>
-            <td>{row.description}</td>
-            <td className="center">{row.dateCreated.toLocaleDateString()}</td>
-            <td className="row-options center">
-              <FontAwesomeIcon className="row-option-edit" icon={faEdit} />
-              <FontAwesomeIcon
-                onClick={() => removeFile(row)}
-                className="row-option-trash"
-                icon={faTrash}
-              />
-              <FontAwesomeIcon
-                onClick={() => download(row)}
-                className="row-option-download"
-                icon={faFileDownload}
-              />
-            </td>
+    <React.Fragment>
+      <table className="Table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th className="center">Created at</th>
+            <th className="center">Options</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {appState.files.map((row, idx) => (
+            <tr key={idx}>
+              <td>{row.title}</td>
+              <td>{row.description}</td>
+              <td className="center">{row.dateCreated.toLocaleDateString()}</td>
+              <td className="row-options center">
+                <FontAwesomeIcon onClick={()=> setFileToEdit(row) } className="row-option-edit" icon={faEdit} />
+                <FontAwesomeIcon
+                  onClick={() => removeFile(row)}
+                  className="row-option-trash"
+                  icon={faTrash}
+                />
+                <FontAwesomeIcon
+                  onClick={() => download(row)}
+                  className="row-option-download"
+                  icon={faFileDownload}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {fileToEdit ? (
+        <Modal>
+          <Form fileToEdit={fileToEdit} onCancel={()=> setFileToEdit(null)} />
+        </Modal>
+      ) : null}
+    </React.Fragment>
   );
 }
 
